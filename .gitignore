@@ -1,3 +1,11 @@
+# Elimina cualquier configuración de Git previa (si existe)
+rm -Force -Recurse .git
+
+# Inicializa nuevo repositorio Git
+git init
+
+# Crea archivo .gitignore
+@"
 # Dependencias
 node_modules/
 
@@ -23,8 +31,7 @@ Thumbs.db
 # IDE/Editor
 .vscode/
 .idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+"@ | Out-File -FilePath .gitignore -Encoding UTF8
+
+# Verifica que se creó correctamente
+Get-Content .gitignore
