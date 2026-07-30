@@ -3,14 +3,16 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './auth/AuthContext';
 import Login from './components/Login';
-import Dashboard from './components/Dashboard';
-import AdminPanel from './components/AdminPanel';
-import DashboardSelector from './components/DashboardSelector'; // Nuevo componente
-import UserList from './components/UserList';
+import DashboardGeneric from './components/DashboardGeneric';
+import DashboardSelector from './components/DashboardSelector';
 import PrivateRoute from './components/PrivateRoute';
+import { getDashboardIds } from './config/dashboards';
 import './App.css';
 
 function App() {
+  const dashboardIds = getDashboardIds();
+  console.log('📋 IDs de dashboards registrados:', dashboardIds);
+
   return (
     <AuthProvider>
       <Router>
@@ -20,31 +22,16 @@ function App() {
             path="/dashboard" 
             element={
               <PrivateRoute>
-                <DashboardSelector /> {/* Nueva ruta principal */}
+                <DashboardSelector />
               </PrivateRoute>
             } 
           />
+          {/* Ruta comodín para cualquier dashboard */}
           <Route 
-            path="/dashboard/powerbi" 
+            path="/dashboard/:dashboardId" 
             element={
               <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            } 
-          />
-          <Route 
-            path="/dashboard/admin" 
-            element={
-              <PrivateRoute>
-                <AdminPanel />
-              </PrivateRoute>
-            } 
-          />
-          <Route 
-            path="/dashboard/user" 
-            element={
-              <PrivateRoute>
-                <UserList />
+                <DashboardGeneric />
               </PrivateRoute>
             } 
           />
