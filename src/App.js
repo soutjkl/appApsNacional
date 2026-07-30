@@ -1,4 +1,4 @@
-// src/App.js
+// src/App.js - Versión CORREGIDA
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './auth/AuthContext';
@@ -11,7 +11,6 @@ import './App.css';
 
 function App() {
   const dashboardIds = getDashboardIds();
-  console.log('📋 IDs de dashboards registrados:', dashboardIds);
 
   return (
     <AuthProvider>
@@ -26,7 +25,7 @@ function App() {
               </PrivateRoute>
             } 
           />
-          {/* Ruta comodín para cualquier dashboard */}
+          {/* Ruta dinámica para cualquier dashboard */}
           <Route 
             path="/dashboard/:dashboardId" 
             element={
