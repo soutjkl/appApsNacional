@@ -2,15 +2,34 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import loginImage from '../img/icon1.svg';
+import { DASHBOARDS } from '../config/dashboards';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faChartBar, 
+  faChartLine, 
+  faChartPie, 
+  faFileAlt,
+  faChartSimple,
+  faSignOutAlt
+} from '@fortawesome/free-solid-svg-icons';
 import './DashboardSelector.css';
+
+const iconMap = {
+  'chart-bar': faChartBar,
+  'chart-line': faChartLine,
+  'chart-pie': faChartPie,
+  'file-alt': faFileAlt,
+  'chart-simple': faChartSimple,
+};
 
 function DashboardSelector() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
-  const handleDashboardSelect = (dashboardType) => {
-    navigate(`/dashboard/${dashboardType}`);
+  const handleDashboardSelect = (dashboardId) => {
+    console.log('🔄 Click en dashboard con ID:', dashboardId);
+    console.log('🔄 Navegando a:', `/dashboard/${dashboardId}`);
+    navigate(`/dashboard/${dashboardId}`);
   };
 
   return (
@@ -20,55 +39,27 @@ function DashboardSelector() {
         <p>Selecciona el dashboard que deseas visualizar</p>
         
         <div className="dashboard-options">
-          <button 
-            className="dashboard-option"
-            onClick={() => handleDashboardSelect('powerbi')}
-          >
-            <div className="option-icon">
-                     <img 
-                            src={loginImage} 
-                            alt="Ilustración de inicio de sesión" 
-                            className="option-icon-image"
-                          />
-            </div>
-            <h3>Resolución 1499</h3>
-            <p>Avance de la estrategia APS</p>
-          </button>
-          
-          <button 
-            className="dashboard-option"
-            onClick={() => handleDashboardSelect('admin')}
-          >
-            <div className="option-icon">
-                <img 
-                            src={loginImage} 
-                            alt="Ilustración de inicio de sesión" 
-                            className="option-icon-image"
-                          />
-            </div>
-            <h3>Resolución 2225</h3>
-            <p>Avance de la estrategia APS</p>
-          </button>
-          
-          <button 
-            className="dashboard-option"
-            onClick={() => handleDashboardSelect('user')}
-          >
-            <div className="option-icon">
-                     <img 
-                            src={loginImage} 
-                            alt="Ilustración de inicio de sesión" 
-                            className="option-icon-image"
-                          />
-            </div>
-            <h3>Resolución 2290</h3>
-            <p>Avance de la estrategia APS</p>
-          </button>
+          {DASHBOARDS.map((dashboard) => (
+            <button 
+              key={dashboard.id}
+              className="dashboard-option"
+              onClick={() => handleDashboardSelect(dashboard.id)}
+            >
+              <div className="option-icon" style={{ color: dashboard.iconColor || '#2e7d32' }}>
+                <FontAwesomeIcon 
+                  icon={iconMap[dashboard.icon] || faFileAlt} 
+                  size="2x"
+                />
+              </div>
+              <h3>{dashboard.title}</h3>
+              <p>{dashboard.description}</p>
+            </button>
+          ))}
         </div>
       </div>
       
       <button className="logout-btn" onClick={logout}>
-        Cerrar Sesión
+        <FontAwesomeIcon icon={faSignOutAlt} />
       </button>
     </div>
   );
